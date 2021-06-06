@@ -1,0 +1,73 @@
+***************    BACKTRACKING    ****************
+
+find all Combinations of n number upto k
+
+class Solution {
+    
+    void findCombinations(vector<vector<int>>& res, int start, int index, vector<int>& store,int n, int k){
+        if(index==k){
+            res.push_back(store);
+            return ;
+        }
+        for(int i=start;i<n;i++){
+            store.push_back(i+1);
+            findCombinations(res,i+1,index+1,store,n,k);
+            store.pop_back();
+        }
+    }
+    
+public:
+    vector<vector<int>> combine(int n, int k) {
+        vector<vector<int>> res;
+        vector<int> store;
+        findCombinations(res,0,0,store,n,k);
+        return res;
+    }
+};
+
+n-queens problem
+
+class Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string> > res;
+        
+        vector<string> Queens(n,string(n,'.'));  // queens
+        
+        solve(res,Queens,0,n);
+        
+        return res;
+    }
+private:
+    void solve(vector<vector<string> >& res, vector<string>& Queens, int row, int n){
+        if(row==n){
+            res.push_back(Queens);
+            return ;
+        }
+        for(int col=0;col<n;col++){
+            if(isValid(Queens,row,col,n)){
+                Queens[row][col]='Q';
+                solve(res,Queens,row+1,n);
+                Queens[row][col]='.';
+            }
+        }
+    }
+    
+    bool isValid(vector<string>& Queens, int row, int col, int n){
+        
+        for(int i=0;i<row;i++){            //  taking column
+            if(Queens[i][col]=='Q')
+                return false;
+        }
+        for(int i=row-1,j=col-1;i>=0 and j>=0;i--,j--){         // taking 45'
+            if(Queens[i][j]=='Q')
+                return false;
+        }
+        for(int i=row-1,j=col+1;i>=0 and j<n;j++,i--){          // taking 135'
+            if(Queens[i][j]=='Q')
+                return false;
+        }
+        return true;
+    }
+};
+
