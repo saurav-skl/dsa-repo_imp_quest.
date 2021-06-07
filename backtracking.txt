@@ -1,6 +1,6 @@
 ***************    BACKTRACKING    ****************
 
-find all Combinations of n number upto k
+1. find all Combinations of n number upto k
 
 class Solution {
     
@@ -25,7 +25,7 @@ public:
     }
 };
 
-n-queens problem
+2. n-queens problem
 
 class Solution {
 public:
@@ -71,7 +71,7 @@ private:
     }
 };
 
-Sudoko solver
+3. Sudoko solver
 
 class Solution {
     
@@ -132,5 +132,31 @@ class Solution {
 public:
     void solveSudoku(vector<vector<char>>& board) {
         sudokoSolver(board,0,0);   
+    }
+};
+
+4. Permutations of array
+
+class Solution {
+    vector<vector<int>> res;
+    
+    void dfs(vector<int>& nums, int i){
+        
+        if(i==nums.size()-1){
+            res.push_back(nums);
+            return ;
+        }
+        
+        for(int j=i;j<nums.size();j++){
+            swap(nums[j],nums[i]);
+            dfs(nums,j+1);
+            swap(nums[j],nums[i]);
+        }
+    }
+    
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        dfs(nums,0);
+        return res;
     }
 };

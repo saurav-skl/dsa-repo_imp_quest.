@@ -1,0 +1,76 @@
+***********************   Linked List **********************
+
+1. K-Group reverse list
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+    ListNode* reverseKlist(ListNode* head, int k){
+        int cnt=0;
+        ListNode* cur = head;
+        while(cur!=NULL){
+            cnt+=1;
+            cur = cur->next;
+        }
+        if(cnt<k)
+            return head;
+        ListNode* temp;
+        ListNode* prev=NULL;
+        cur = head;
+        cnt=0;
+        while(cur!=NULL and cnt<k){
+            cnt++;
+            temp = cur->next;
+            cur->next = prev;
+            prev = cur;
+            cur = temp;
+        }
+        head->next = reverseKlist(temp,k);
+        return prev;
+    }
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        if(head==NULL or head->next==NULL or k==1)
+            return head;
+        int cnt=0;
+        head = reverseKlist(head,k);
+        return head;
+    }
+};
+
+2. Reverse Linked List
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(head==NULL or head->next==NULL)
+            return head;
+        ListNode* current = head;
+        ListNode* temp;
+        ListNode * prev = NULL;
+        while(current!=NULL){
+            temp = current->next;
+            current->next = prev;
+            prev = current;
+            current = temp;
+        }
+        return prev;
+    }
+};
