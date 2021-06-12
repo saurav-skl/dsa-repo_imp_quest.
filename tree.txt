@@ -1,0 +1,80 @@
+
+Inorder =>
+    left =>root => right
+
+PreOrder =>
+    root => left => right
+
+PostOrder =>
+    left => right => root
+
+
+1. Level order traversal
+
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        queue<TreeNode*> q;
+        q.push(root);
+        q.push(NULL);
+        vector<vector<int>> res;
+        vector<int> level;
+        if(root==NULL)
+            return res;
+        while(!q.empty()){
+            TreeNode * dummy = q.front();
+            if(dummy==NULL){
+                res.push_back(level);
+                level.clear();
+                q.pop();
+                if(!q.empty()){
+                    q.push(NULL);
+                }
+            } else {
+                level.push_back(dummy->val);
+                q.pop();
+                if(dummy->left)
+                    q.push(dummy->left);
+                if(dummy->right)
+                    q.push(dummy->right);
+            }
+        }
+        return res;
+    }
+};
+
+
+2. Inorder Travsersal
+
+// iterative
+
+const inorderTraversal = (root) => {
+    let curr = root,  res = [], stack = [];
+    while (curr || stack.length) {
+        while (curr) {
+            stack.push(curr);
+            curr = curr.left;
+        }
+        curr = stack.pop();
+        res.push(curr.val);
+        curr = curr.right;
+    }
+    return res;
+};
+
+// recursuve
+
+const inorderTraversal = (root) => {
+    const res = [];
+    traverse(root);
+    return res;
+    
+    function traverse(node) {
+        if (!node) return;
+        traverse(node.left);
+        res.push(node.val);
+        traverse(node.right);
+    }
+};
+
+3. 
