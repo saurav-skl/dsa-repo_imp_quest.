@@ -1,0 +1,244 @@
+1.  Maximum Product Subarray
+
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int best=INT_MIN,n=nums.size(),minProd=1,maxProd=1;
+        for(int i=0;i<n;i++){
+            if(nums[i]<0)
+                swap(minProd,maxProd);
+            
+            minProd = min(nums[i]*minProd,nums[i]);
+            maxProd = max(nums[i]*maxProd,nums[i]);
+            
+            best = max(best,maxProd);
+        }
+        return best;
+    }
+};
+
+2. Longest Increasing Subsequences
+
+TC : O(n^2)
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n =nums.size(),ans=1;
+        if(n==0)
+            return 0;
+        vector<int> dp(n,1);
+        for(int i=1;i<n;i++){
+            for(int j=0;j<i;j++){
+                if(nums[i]>nums[j])
+                    dp[i] = max(dp[i],dp[j]+1);
+                ans = max(ans,dp[i]);
+            }
+            
+        }
+        return ans;
+    }
+};
+
+TC : O(Nlogn)
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        if(n==0)
+            return 0;
+        vector<int> dp;
+        dp.push_back(nums[0]);
+        // memset(dp,0,sizeof(dp));
+        for(int i=1;i<n;i++){
+            if(nums[i]>dp.back())
+                dp.push_back(nums[i]);
+            else {
+                int ind = lower_bound(dp.begin(),dp.end(),nums[i])-dp.begin();
+                dp[ind]=nums[i];
+            }
+            
+        }
+        return dp.size();
+    }
+};
+
+3. Longest Common Subsequences
+
+TC: O(N^2)
+
+class Solution {
+public:
+    int dp[1001][1001];
+    int longestCommonSubsequence(string text1, string text2) {
+        memset(dp,-1,sizeof(dp));
+        int n =text1.length(), m = text2.length();
+        return lcs(text1,text2,n,m);
+    }
+    int lcs(string s1,string s2, int n, int m){
+        if(dp[n][m]!=-1)
+            return dp[n][m];
+        if(n==0 or m==0)
+            return dp[n][m]=0;
+        if(s1[n-1]==s2[m-1])
+            return dp[n][m]=1+lcs(s1,s2,n-1,m-1);
+        return dp[n][m]=max(lcs(s1,s2,n-1,m),lcs(s1,s2,n,m-1));
+    }
+};
+
+TC: O(N^2)
+
+class Solution {
+public:
+    int longestCommonSubsequence(string text1, string text2) {
+        int n = text1.length(), m = text2.length();
+        vector<vector<int>> dp(n+1,vector<int>(m+1));
+        for(int i=0;i<=n;i++){
+            for(int j=0;j<=m;j++){
+                if(i==0 or j==0)
+                    dp[i][j]=0;
+                else if(text1[i-1]==text2[j-1])
+                    dp[i][j]=dp[i-1][j-1]+1;
+                else 
+                    dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+        return dp[n][m];
+    }
+};
+
+
+4. 0/1 Knapsack problem
+
+int knapSack(int W, int wt[], int val[], int n) 
+{ 
+   // Your code here
+   vector< vector<int>>dp(n+1,vector<int>(W+1));
+   for(int i=0;i<=n;i++)
+        dp[i][0] = 0;
+    for(int i=1;i<=W;i++)
+        dp[0][i] = 0;
+        
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=W;j++)
+        {
+            if(j>=wt[i-1])
+            {
+                dp[i][j] = max(val[i-1]+dp[i-1][j-wt[i-1]],dp[i-1][j]);
+            }
+            else 
+                dp[i][j] = dp[i-1][j];
+        }
+    }
+    
+    return dp[n][W];
+}
+
+5. Subset Sum Problem
+
+int solve(vector<int >&a , int n, int sum)
+{
+   
+    vector<vector<int>>dp(n+1,vector<int>(sum+1));
+    
+    for(int i=0;i<n;i++)
+        dp[i][0] = 1;
+    for(int i=1;i<=sum;i++)
+        dp[0][i] = 0;
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=sum;j++)
+        {
+            if(j>=a[i-1])
+                dp[i][j] = dp[i-1][j] || dp[i-1][j-a[i-1]];
+            else
+                dp[i][j] = dp[i-1][j];
+        }
+    }
+    
+    if(dp[n][sum]==1)
+        cout<<"YES"<<endl;
+    else 
+        cout<<"NO"<<endl;
+    return 0;
+}
+
+6. Partition Equal Subset sum
+
+class Solution {
+    bool partition(vector<int>& nums, int tar){
+      int n = nums.size();
+      vector<vector<bool>> dp(n+1,vector<bool>(tar+1,false));
+      for(int i=0;i<n;i++)
+          dp[i][0]=true;
+      for(int i=1;i<=tar;i++)
+          dp[0][i]=false;
+      for(int i=1;i<n+1;i++){
+          for(int j=1;j<=tar;j++){
+              if(j>=nums[i-1])
+                  dp[i][j]=dp[i-1][j] || dp[i-1][j-nums[i-1]];
+              else 
+                  dp[i][j]=dp[i-1][j];
+          }
+      }
+      return dp[n][tar];
+    }
+public:
+    bool canPartition(vector<int>& nums) {
+        int sum=0;
+        for(auto x:nums)
+            sum+=x;
+        if(sum&1)
+            return false;
+        return partition(nums,sum/2);
+    }
+};
+
+10. Count of subset with given sum
+
+int subsetSum(int a[], int n, int sum)
+{
+    int tab[n + 1][sum + 1];
+
+    tab[0][0] = 1;
+    for (int i = 1; i <= sum; i++)
+        tab[0][i] = 0;
+    for (int i = 1; i <= n; i++)
+        tab[i][0] = 1;
+ 
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j <= sum; j++)
+        {
+            if (j>=a[i - 1])
+                tab[i][j] = tab[i - 1][j] + tab[i - 1][j - a[i - 1]];
+            else
+                tab[i][j] = tab[i - 1][j];
+        }
+    }
+ 
+ 
+    return tab[n][sum];
+}
+
+11. Next Permutation
+
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+        int i = nums.size() - 2;
+        while (i >= 0 && nums[i + 1] <= nums[i]) {
+            i--;
+        }
+        if (i >= 0) {
+            int j = nums.size() - 1;
+            while (j > 0 && nums[j] <= nums[i]) {
+                j--;
+            }
+            swap(nums[i], nums[j]);
+        }
+        reverse(nums.begin() + i + 1, nums.end());
+    }
+};

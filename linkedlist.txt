@@ -74,3 +74,115 @@ public:
         return prev;
     }
 };
+
+
+5. Reverse Linked List
+
+// iterative 
+
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(head==NULL or head->next==NULL)
+            return head;
+        ListNode *temp, *prev=NULL, *cur = head;
+        while(cur!=NULL){
+            temp = cur->next;
+            cur->next = prev;
+            prev = cur;
+            cur = temp;
+        }
+        return prev;
+    }
+};
+
+// Recursive 
+
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(!head or !(head->next))
+            return head;
+        ListNode *node = reverseList(head->next);
+        head->next->next = head;
+        head->next = NULL;
+        return node;
+    }
+};
+
+
+6. Detect Cycle in LinkedList
+
+// Iterative
+// Floyd and Warshell Algorithm
+
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        ListNode *slow = head, *fast = head;
+        while(fast and fast->next){
+            slow = slow->next;
+            fast = fast->next->next;
+            if(slow==fast)
+                return true;
+        }
+        return false;
+    }
+};
+
+// Recursive 
+
+class HasCycleInLinkedList{
+   public boolean hasCycle(ListNode head){
+       if(head == null || head.next == null) return false;
+       if(head.next == head) return true;
+       ListNode nextNode = head.next; 
+       head.next = head;
+       boolean isCycle = hasCycle(nextNode);
+       return isCycle;
+   }
+}
+
+
+7. Flatten Linked List
+
+Node* mergeTwoLists(Node* a, Node* b) {
+    
+    Node *temp = new Node(0);
+    Node *res = temp; 
+    
+    while(a != NULL && b != NULL) {
+        if(a->data < b->data) {
+            temp->bottom = a; 
+            temp = temp->bottom; 
+            a = a->bottom; 
+        }
+        else {
+            temp->bottom = b;
+            temp = temp->bottom; 
+            b = b->bottom; 
+        }
+    }
+    
+    if(a) temp->bottom = a; 
+    else temp->bottom = b; 
+    
+    return res -> bottom; 
+    
+}
+Node *flatten(Node *root)
+{
+   
+        if (root == NULL || root->next == NULL) 
+            return root; 
+  
+        // recur for list on right 
+        root->next = flatten(root->next); 
+  
+        // now merge 
+        root = mergeTwoLists(root, root->next); 
+  
+        // return the root 
+        // it will be in turn merged with its left 
+        return root; 
+}

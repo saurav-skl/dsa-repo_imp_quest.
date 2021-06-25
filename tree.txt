@@ -48,33 +48,136 @@ public:
 
 // iterative
 
-const inorderTraversal = (root) => {
-    let curr = root,  res = [], stack = [];
-    while (curr || stack.length) {
-        while (curr) {
-            stack.push(curr);
-            curr = curr.left;
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> nodes;
+        stack<TreeNode*> todo;
+        while (root || !todo.empty()) {
+            while (root) {
+                todo.push(root);
+                root = root -> left;
+            }
+            root = todo.top();
+            todo.pop();
+            nodes.push_back(root -> val);
+            root = root -> right;
         }
-        curr = stack.pop();
-        res.push(curr.val);
-        curr = curr.right;
-    }
-    return res;
-};
-
-// recursuve
-
-const inorderTraversal = (root) => {
-    const res = [];
-    traverse(root);
-    return res;
-    
-    function traverse(node) {
-        if (!node) return;
-        traverse(node.left);
-        res.push(node.val);
-        traverse(node.right);
+        return nodes;
     }
 };
 
-3. 
+// recursive
+
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> nodes;
+        inorder(root, nodes);
+        return nodes;
+    }
+private:
+    void inorder(TreeNode* root, vector<int>& nodes) {
+        if (!root) {
+            return;
+        }
+        inorder(root -> left, nodes);
+        nodes.push_back(root -> val);
+        inorder(root -> right, nodes);
+    }
+};
+
+3. PreOrder
+
+// iterative
+
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> nodes;
+        stack<TreeNode*> todo;
+        while (root || !todo.empty()) {
+            if (root) {
+                nodes.push_back(root -> val);
+                if (root -> right) {
+                    todo.push(root -> right);
+                }
+                root = root -> left;
+            } else {
+                root = todo.top();
+                todo.pop();
+            }
+        }
+        return nodes;
+    }
+};
+
+// Recursive 
+
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> nodes;
+        preorder(root, nodes);
+        return nodes;
+    }
+private:
+    void preorder(TreeNode* root, vector<int>& nodes) {
+        if (!root) {
+            return;
+        }
+        nodes.push_back(root -> val);
+        preorder(root -> left, nodes);
+        preorder(root -> right, nodes);
+    }
+};
+
+
+4. PostOrder
+
+// Iterative 
+
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> nodes;
+        stack<TreeNode*> todo;
+        TreeNode* last = NULL;
+        while (root || !todo.empty()) {
+            if (root) {
+                todo.push(root);
+                root = root -> left;
+            } else {
+                TreeNode* node = todo.top();
+                if (node -> right && last != node -> right) {
+                    root = node -> right;
+                } else {
+                    nodes.push_back(node -> val);
+                    last = node;
+                    todo.pop();
+                }
+            }
+        }
+        return nodes;
+    }
+};
+
+// Recursive 
+
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> nodes;
+        postorder(root, nodes);
+        return nodes;
+    }
+private:
+    void postorder(TreeNode* root, vector<int>& nodes) {
+        if (!root) {
+            return;
+        }
+        postorder(root -> left, nodes);
+        postorder(root -> right, nodes);
+        nodes.push_back(root -> val);
+    }
+};
