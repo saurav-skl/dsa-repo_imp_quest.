@@ -59,11 +59,11 @@ private:
             if(Queens[i][col]=='Q')
                 return false;
         }
-        for(int i=row-1,j=col-1;i>=0 and j>=0;i--,j--){         // taking 45'
+        for(int i=row-1,j=col-1;i>=0 and j>=0;i--,j--){         // taking 135'
             if(Queens[i][j]=='Q')
                 return false;
         }
-        for(int i=row-1,j=col+1;i>=0 and j<n;j++,i--){          // taking 135'
+        for(int i=row-1,j=col+1;i>=0 and j<n;j++,i--){          // taking 45'
             if(Queens[i][j]=='Q')
                 return false;
         }

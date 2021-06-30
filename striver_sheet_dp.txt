@@ -149,7 +149,7 @@ int solve(vector<int >&a , int n, int sum)
         dp[0][i] = 0;
     for(int i=1;i<=n;i++)
     {
-        for(int j=1;j<=sum;j++)
+        for(int j=1;j<=sum;j++)         
         {
             if(j>=a[i-1])
                 dp[i][j] = dp[i-1][j] || dp[i-1][j-a[i-1]];
