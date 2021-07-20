@@ -242,3 +242,46 @@ public:
         reverse(nums.begin() + i + 1, nums.end());
     }
 };
+
+
+12 . Unique Paths - II
+
+class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& nums) {
+        int n = nums.size(), m = nums[0].size();
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(nums[i][j] == 1)
+                    nums[i][j]=0;
+                else 
+                    nums[i][j]=1;
+            }
+        }
+        int f=1;
+        for(int i=0;i<n;i++){
+            if(nums[i][0] == 0)
+                f=0;
+            if(f==0)
+                nums[i][0] = 0;
+        }
+        f=1;
+        for(int j=0;j<m;j++){
+            if(nums[0][j] == 0)
+                f=0;
+            if(f==0)
+                nums[0][j] = 0;
+        }
+        
+        for(int i=1;i<n;i++){
+            for(int j=1;j<m;j++){
+                if(nums[i][j]==0)
+                    continue;
+                else 
+                    nums[i][j] = nums[i-1][j] + nums[i][j-1];
+            }
+        }
+        return nums[n-1][m-1];
+    }
+};

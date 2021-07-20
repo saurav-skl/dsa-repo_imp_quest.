@@ -12,3 +12,35 @@
 581. Shortest Unsorted Continuous Subarray
 42. Trapping Rain Water
 896. Monotonic Array
+
+
+3-sum 
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        int n = nums.size();
+        set<vector<int>> res;
+        if(n<3)
+            return {};
+        sort(nums.begin(),nums.end());
+        for(int i=0;i<n-2;i++){
+            int j = i+1, k = n-1;
+            while(j<k){
+                if(nums[i]+nums[j]+nums[k]==0){
+                    res.insert({nums[i],nums[j],nums[k]});
+                    j++;
+                    k--;
+                } else if(nums[i]+nums[j]+nums[k]<0){
+                    j++;
+                } else {
+                    k--;
+                }
+            }
+        }
+        vector<vector<int>> vect;
+        for(auto x:res)
+            vect.push_back(x);
+        return vect;
+    }
+};

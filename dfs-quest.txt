@@ -1,0 +1,204 @@
+
+1254. Number of Closed Islands
+
+class Solution {
+    void dfs(vector<vector<int>>& board, int i, int j){
+        if(i<0 or j<0 or i>=board.size() or j>=board[0].size()){
+            return ;
+        }
+        if(board[i][j]==1 or board[i][j]==-1 )
+            return ;
+        board[i][j]=-1;
+        dfs(board,i+1,j);
+        dfs(board,i-1,j);
+        dfs(board,i,j+1);
+        dfs(board,i,j-1);
+    }
+public:
+    int closedIsland(vector<vector<int>>& board) {
+        int n = board.size();
+        int m = board[0].size();
+        if(n==1 or m==1){
+            return 0;
+        }
+        
+        for(int i=0;i<n;i++){
+            if(board[i][0]==0)
+                dfs(board,i,0);
+        }
+         
+        for(int i=0;i<n;i++){
+            if(board[i][m-1]==0)
+                dfs(board,i,m-1);
+        }
+        
+        for(int j=0;j<m;j++){
+            if(board[0][j]==0)
+                dfs(board,0,j);
+        }
+        
+        for(int j=0;j<m;j++){
+            if(board[n-1][j]==0)
+                dfs(board,n-1,j);
+        }
+        int cnt=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(board[i][j]==0){
+                    dfs(board,i,j);
+                    cnt++;
+                }
+            }
+        }
+        return cnt;
+    }
+};
+
+
+2. Number Of Islands 
+
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        
+        int x = grid.size(), y,count=0;
+        if(x>0) 
+            y=grid[0].size();
+        else 
+            y=0;
+        //cout<<x<<" "<<y<<endl;
+        for(int i=0 ; i < x ; i++)
+        {
+            for(int j = 0 ; j < y; j++){
+                if(grid[i][j]=='1')
+                {
+                    count++;
+                    eraseislands(i,j,grid);
+                }
+            }
+        }
+        
+        return count;
+    }
+    
+private :
+        
+    void eraseislands( int a, int b , vector<vector<char>>& grid)
+    {
+        int x= grid.size();int y=grid[0].size();
+        if(a<0 || a==x || b<0 || b==y || grid[a][b]=='0')
+            return ;
+        grid[a][b]='0';
+        eraseislands(a-1,b,grid);
+        eraseislands(a+1,b,grid);
+        eraseislands(a,b-1,grid);
+        eraseislands(a,b+1,grid);
+                
+    }
+};
+
+graph bipartite 
+
+vector<int> vis(105),color(105);
+class Solution {
+public:
+    bool isBipartite(vector<vector<int>>& graph) {
+        int n = graph.size();
+        int m = graph[0].size();
+        for(int i=0;i<104;i++){
+            vis[i]=0;
+            color[i]=0;
+        }
+        for(int i=0;i<n;i++){
+            if(vis[i]==0)
+                if(!(dfs(i,graph,0)))
+                    return false;
+        }
+        return true;
+    }
+    
+    bool dfs(int node, vector<vector<int>> graph, int clr){
+        color[node] = clr;
+        vis[node] = 1;
+        for(auto child:graph[node]){
+            if(vis[child]==0)
+            {
+                if(!(dfs(child,graph,clr^1)))
+                    return false;
+            }
+            else if(color[child]==color[node])
+                return false;
+        }
+        return true;
+    }
+};
+
+
+course schedule - II    
+
+class Solution {
+    bool dfsCycleHelper(int node, vector<int>& vis, vector<int>& dfsvis, vector<int> adj[]){
+        vis[node]=1;
+        dfsvis[node]=1;
+        for(auto child : adj[node]) {
+            if(!vis[child]) {
+                if(dfsCycleHelper(child, vis, dfsvis, adj)) return true;
+            } else if(dfsvis[child]) return true;
+        }
+        dfsvis[node]=0;
+        return false;
+    } 
+    
+   
+    
+    bool detectCycle(int n, vector<int> adj[]){
+        vector<int> vis(n+1,0), dfsvis(n+1,0);
+        for(int i=0;i<n;i++){
+            if(!vis[i]){
+                if(dfsCycleHelper(i, vis, dfsvis, adj))
+                    return true;
+            }
+        }
+        return false;
+    }
+   
+    
+    void dfs(int node, stack<int>& st, vector<int>& vis, vector<int> adj[], int par){
+        vis[node]=1;
+        for(auto child : adj[node]){
+            if(vis[child]==0)
+                dfs(child,st,vis,adj, node);            
+        }
+        st.push(node);
+    }
+public:
+    vector<int> findOrder(int n, vector<vector<int>>& grid) {
+        vector<int> res;
+        if(grid.size()==0){
+            for(int i=0;i<n;i++)
+                res.push_back(i);
+            return res;
+        }
+        vector<int> adj[n+1];
+        for(int i=0;i<grid.size();i++){
+            adj[grid[i][1]].push_back(grid[i][0]);
+        }
+        
+        if(detectCycle(n, adj))
+            return res;
+        
+        stack<int> st;
+        vector<int> vis(n+1,0);
+        int f=0;
+        for(int i=0;i<n;i++){
+            if(vis[i]==0)
+                dfs(i,st, vis, adj, -1);
+        }
+        
+        while(!st.empty()){
+            res.push_back(st.top());
+            st.pop();
+        }
+        return res;
+    }
+};
