@@ -1,0 +1,10 @@
+{
+  "window.autoDetectColorScheme": true,
+  "workbench.preferredDarkColorTheme": "Quiet Light",
+  "workbench.colorTheme": "Solarized Light",
+  "workbench.preferredHighContrastColorTheme": "Monokai Dimmed",
+  "editor.fontFamily": "'Comic Sans MS'",
+  "files.autoSave": "onFocusChange",
+  "editor.fontSize": 18,
+  "editor.tabSize": 2
+}

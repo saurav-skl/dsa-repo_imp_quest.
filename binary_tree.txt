@@ -385,7 +385,214 @@ public:
     }
 };
 
+14. Top View of Binary Tree 
 
+class Solution
+{
+    private:
+    map<int,vector<pair<int,int>>> mp;
+    vector<int> res;
+    void topView(Node* root, int row, int col){
+        if(!root)
+            return ;
+        topView(root->left, row+1, col-1);
+        topView(root->right, row+1, col+1);
+        
+        mp[col].push_back({row, root->data});
+        
+    }
+    public:
+    vector<int> topView(Node *root)
+    {
+        //Your code here
+        if(!root)
+            return {};
+        topView(root, 0, 0);
+        for(auto child : mp){
+            sort(child.second.begin(),child.second.end());
+            res.push_back(child.second[0].second);
+        }
+        return res;
+    }
+
+};
+
+15. Boundary Traversal of Binary Tree 
+
+class Solution {
+    vector<int> res;
+    void printLeaf(Node* root){
+        if(!root)
+            return ;
+        printLeaf(root->left);
+        if(!root->left and !root->right)
+            res.push_back(root->data);
+        printLeaf(root->right);
+    }
+    void printLeftLeaf(Node* root){
+        if(!root)
+            return ;
+        if(root->left){
+            res.push_back(root->data);
+            printLeftLeaf(root->left);
+        } else if(root->right){
+            res.push_back(root->data);
+            printLeftLeaf(root->right);
+        }
+    }
+    void printRightLeaf(Node* root){
+        if(!root)
+            return ;
+        if(root->right){
+            printRightLeaf(root->right);
+            res.push_back(root->data);
+        } else if(root->left) {
+            printRightLeaf(root->left);
+            res.push_back(root->data);
+        }
+    }
+public:
+    vector <int> printBoundary(Node *root)
+    {
+        //Your code here
+        if(!root)
+            return {};
+        res.push_back(root->data);
+        
+        printLeftLeaf(root->left);
+        
+        printLeaf(root->left);
+        printLeaf(root->right);
+        
+        printRightLeaf(root->right);
+        return res;
+    }
+};
+
+16. Diameter Of Binary Tree  
+
+class Solution {
+    int diameter(TreeNode* root, int &d){
+        if(!root) return 0;
+        int ld = diameter(root->left, d);
+        int rd = diameter(root->right, d);
+        
+        d = max(d, ld+rd);
+        
+        return max(ld,rd)+1;
+    }
+public:
+    int diameterOfBinaryTree(TreeNode* root) {
+        int d=0;
+        diameter(root,d);
+        return d;
+    }
+};
+
+17. Balanced Binary Tree 
+
+class Solution {
+    
+    int balancedheight(TreeNode* root, bool &res){
+        if(!root)
+            return 0;
+        if(!res)
+            return 0;
+        int left = balancedheight(root->left, res);
+        int right = balancedheight(root->right, res);
+        if(abs(left-right)>1)
+            res = false;
+        return max(left,right)+1;
+    }
+public:
+    bool isBalanced(TreeNode* root) {
+        bool ans=true;
+        if(!root)
+            return true;
+        balancedheight(root, ans);
+        return ans;
+    }
+};
+
+18. Same Tree  
+
+class Solution {
+    bool isSame(TreeNode* p, TreeNode* q){
+        if(p==NULL and q==NULL)
+            return true;
+        if(!p or !q)
+            return false;
+        return (p->val==q->val) and isSame(p->left,q->left) and isSame(p->right,q->right);
+    }
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        return isSame(p,q);
+    }
+};
+
+19. Lowest Common Ancestor of Binary Tree 
+
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(!root or root==p or root==q)       // if any child present return root 
+            return root;
+        TreeNode* left = lowestCommonAncestor(root->left, p, q);
+        TreeNode* right = lowestCommonAncestor(root->right, p, q);
+        
+        if(left and right)
+            return root;
+        if(left)
+            return left;
+        return right;
+    }
+};
+
+20. Binary tree maximum path sum from any node to any node
+
+class Solution {
+    int pathSum(TreeNode* root, int &res){
+        if(!root)
+            return 0;
+        int left = pathSum(root->left, res);
+        int right = pathSum(root->right, res);
+        
+        int temp = max(max(left, right) + root->val, root->val);
+        int ans = max(left + right + root->val, temp);
+        res = max(ans, res);
+        
+        return temp;
+    }
+public:
+    int maxPathSum(TreeNode* root) {
+        int res=INT_MIN;
+        pathSum(root, res);
+        return res;
+    }
+};
+
+21. Binary tree maximum path sum from leaf to leaf 
+
+class Solution {
+    int pathSum(TreeNode* root, int &res){
+        if(!root)
+            return 0;
+        int left = pathSum(root->left, res);
+        int right = pathSum(root->right, res);
+        
+        int temp = max(left, right) + root->val;
+        int ans = max(left + right + root->val, temp);
+        res = max(ans, res);
+        
+        return temp;
+    }
+public:
+    int maxPathSum(TreeNode* root) {
+        int res=INT_MIN;
+        pathSum(root, res);
+        return res;
+    }
+};
 
 
 . Diameter of Binary Tree 
@@ -420,3 +627,4 @@ public:
         return diameter(root);
     }
 };
+
