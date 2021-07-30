@@ -160,3 +160,50 @@ public:
         return res;
     }
 };
+
+5. Word Ladder  (BFS + Backtracking)
+
+class Solution {
+public:
+    int ladderLength(string begin, string end, vector<string>& list) {
+        int f=0;
+        for(auto x:list){
+            if(end==x)
+                f=1;
+        }
+        if(!f)
+            return 0;
+        if(end==begin)
+            return 0;
+        queue<string> q;
+        q.push(begin);
+        int cnt=0;
+        int n = list.size();
+        unordered_map<string,int> vis;
+        unordered_set<string>  mark_unvis;
+        for(auto x:list)
+            mark_unvis.insert(x);
+        while(!q.empty()){
+            int sz = q.size();
+            cnt++;
+            while(sz--){
+                string front = q.front();
+                q.pop();
+                // cout<<front<<" ";
+                if(front==end)
+                    return cnt;
+                for(int i=0;i<front.length();i++){
+                    string item = front;
+                    for(char x = 'a'; x <= 'z'; x++){
+                        item[i]=x;
+                        if(mark_unvis.find(item)!=mark_unvis.end()){
+                            q.push(item);
+                            mark_unvis.erase(item);
+                        }
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+};

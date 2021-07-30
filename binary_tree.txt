@@ -594,6 +594,127 @@ public:
     }
 };
 
+22. Flatten Binary tree to Linked List  
+
+class Solution {
+    TreeNode* flattenList(TreeNode* root){
+        if(!root) return NULL;
+        TreeNode* l = flattenList(root->left);
+        TreeNode* r = flattenList(root->right);
+        if(l==NULL)
+            return root;
+        
+        while(l->right!=NULL)
+            l = l->right;
+        l->right = r;
+        root->right = root->left;
+        root->left = NULL;
+        return root;
+        
+    }
+public:
+    void flatten(TreeNode* root) {
+        root = flattenList(root);
+        return ;
+    }
+};
+
+23. Populating Next Right Pointer in each Node
+
+class Solution {
+    Node* connect_helper(Node* root){
+        if(!root)
+            return NULL;
+        Node* pre = root;
+        Node* cur = NULL;
+        
+        while(pre->left){
+            cur = pre;
+            while(cur){
+                cur->left->next = cur->right;
+                if(cur->next){
+                    cur->right->next = cur->next->left;
+                }
+                cur = cur->next;
+            }
+            pre = pre->left;
+        }
+        return root;
+    }
+public:
+    Node* connect(Node* root) {
+        root = connect_helper(root);
+        return root;
+    }
+};
+
+24. Convert Sorted Array to Binary Search tree  
+
+class Solution {
+    TreeNode* BuildTree(vector<int>& nums, int left, int right){
+        if(left>right)
+            return NULL;
+        int mid = (left+right)/2;
+        TreeNode *root = new TreeNode(nums[mid]);
+        root->left = BuildTree(nums, left, mid-1);
+        root->right = BuildTree(nums, mid+1, right);
+        
+        return root;
+    }
+public:
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+        TreeNode* root = BuildTree(nums, 0, nums.size()-1);
+        return root;
+    }
+};
+
+
+25. Validate Binary Search Tree  
+
+class Solution {
+    TreeNode* prev = NULL;
+    bool dfs_helper(TreeNode* root){
+        if(!root)
+            return true;
+        if(!dfs_helper(root->left)) return false;
+        
+        if(prev!=NULL and prev->val >= root->val)
+            return false;
+        prev = root;
+        if(!dfs_helper(root->right)) return false;
+        
+        return true;
+    }
+public:
+    bool isValidBST(TreeNode* root) {
+        prev = NULL;
+        return dfs_helper(root);
+    }
+};
+
+
+26. Range Sum BST  
+
+class Solution {
+public:
+    
+    int result = 0;
+    
+    void inorderBST(TreeNode* root, int L, int R) {
+       //inorder traversal and then check for the condition
+        if(root != NULL) {
+            inorderBST(root->left, L, R);
+            if(root->val >=L && root->val <= R)
+                result+=root->val;
+            inorderBST(root->right, L, R);
+        } 
+    }
+    
+    int rangeSumBST(TreeNode* root, int L, int R) {
+        inorderBST(root, L, R);
+        return result;
+    }
+};
 
 . Diameter of Binary Tree 
 

@@ -5,6 +5,8 @@
   "workbench.preferredHighContrastColorTheme": "Monokai Dimmed",
   "editor.fontFamily": "'Comic Sans MS'",
   "files.autoSave": "onFocusChange",
-  "editor.fontSize": 18,
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "editor.inlayHints.fontFamily": "'Comic Sans MS'",
+  "terminal.integrated.fontFamily": "Cascadia Code",
+  "terminal.integrated.fontSize": 14,
 }
